@@ -1,0 +1,507 @@
+##->1.a.    2D Linear Convolution<-
+
+```
+clc;
+x =[1 ,2 ,3;4 ,5 ,6;7 ,8 ,9];
+h = [1 ,1;1 ,1;1 ,1];
+y = conv2(x,h);
+disp('Linear 2D convolution y=',y);
+```
+
+##->1.b.    Circular Convolution between two 2D matrices<-
+
+```
+clc ;
+x = [1,2;3,4];
+h = [5,6;7,8];
+X = fft2(x);
+H = fft2(h);
+Y = X.*H;
+y = ifft(Y);
+disp ('Circular Convolution Result y = ',y);
+```
+
+##->2 Circular Convolution expressed as linear convolution plus alias<-
+
+```
+clc ;
+x = [1 ,2;3 ,4]; 
+h = [5 ,6;7 ,8];
+y = conv2 (x,h);
+y1 = [y(:,1)+y(:,$),y(:,2)];
+y2 = [y1(1,:)+y1($,:);y1(2,:)];
+disp('Linear Convolution Result y =',y);
+disp('Circular Convolution Expressed as Linear Convolution plus alias = ',y2);
+```
+
+##->3. a.   Linear Cross correlation of a 2D matrix<-
+
+```
+clc ;
+x = [3 ,1;2 ,4]; 
+h1 = [1 ,5;2 ,3];
+h2 = h1 (:,$ : -1:1);
+h = h2($: -1:1 ,:);
+y = conv2 (x,h);
+disp("Linear Cross Correlation of a 2D matrix y = ",y);
+```
+
+##->3. b.   Circular correlation between two signals<-
+
+```
+clc ;
+x = [1 ,5;2 ,4];
+h = [3 ,2;4 ,1];
+h = h(:,$ : -1:1) ;
+h = h($: -1:1 ,:);
+X = fft2 (x);
+H = fft2 (h);
+Y = X.*H;
+y = ifft (Y);
+disp("Circular Correlation Result y = ",y);
+```
+
+##->3. c.   Linear auto correlation of a 2D matrix<-
+
+```
+clc ; 
+x1 = [1 ,1;1 ,1];
+x2 = x1 (:,$ : -1:1);
+x2 = x2($: -1:1 ,:);
+x = conv2 (x1 ,x2);
+disp("Linear auto Correlation Result x = ",x);
+```
+
+##->4. DFT of 4x4 gray scale image<-
+
+```
+clc; 
+f=[ 1 1 1 1;1 1 1 1;1 1 1 1;1 1 1 1];
+t=fft2(f);
+disp('display',t)
+```
+
+##->5. a.   Compute discrete cosine transform<-
+
+```
+clc;
+N=[1,2,3,4]
+x=dct(N);
+disp('DCT matrix of order four',x)
+```
+
+##->5. b.   Program to perform KL transform for the given 2D matrix<-
+
+```
+clc;
+f=[1,1,1,1;1,1,1,1;1,1,1,1;1,1,1,1];
+N=4
+for k=0:N-1
+for l=0:N-1
+w(k+1,l+1)=int(cos((2*%pi*k*1)/N)-%i*sin((2*%pi*k*1)/N))
+end
+end 
+disp('Kernel Matrix of 2d DFT=',w)
+F=w*f*w
+disp('2D DFT of given 2D image=',F)
+```
+
+##->6. a.   Brightness enhancement of an image<-
+
+```
+clc;
+close;
+a=imread((getIPCVpath() +"/images/"+'baboon.png'))
+a=rgb2gray(a);
+b=double(a)+50;
+b=uint8(b);
+figure(1)
+imshow(a);
+title('Original Image')
+figure(2)
+imshow(b);
+title('Enhanced Image')
+```
+
+##->6. b.   Brightness suppression of an image<-
+
+```
+clc;
+close;
+a=imread((getIPCVpath() +"/images/"+'baboon.png'))
+a=rgb2gray(a); 
+b=double(a)-50;
+b=uint8(b);
+figure(1)
+imshow(a);
+title('Original Image')
+figure(2) 
+imshow(b);
+title('Enhanced Image')
+```
+
+##->6. c.   Contrast Manipulation<-
+
+```
+clc;
+close;
+a=imread((getIPCVpath() +"/images/"+'baboon.png'))
+a=rgb2gray(a); 
+b=double(a)*0.5;
+b=uint8(b);
+c=double(b)*2;
+c=uint8(c);
+figure(1)
+imshow(a);
+title('Original Image')
+figure(2)
+imshow(b);
+title('Decrease In Contrast')
+figure(3)
+imshow(c);
+title('Increase In Contrast')
+```
+
+##->6. d.   Image negative<-
+
+```
+clc;
+close;
+a=imread(fullpath(getIPCVpath() +"/images/"+'baboon.png'));
+a=rgb2gray(a);
+k=255-double(a);
+k=uint8(k);
+imshow(a);
+title('Original once Image')
+figure(2)
+imshow(k);
+title('Negative Of Original Image')
+```
+
+##->6. e. Image Negative of color image<-
+
+```
+clc;
+close;
+a=imread(fullpath(getIPCVpath() +"/images/"+'baboon.png'));
+k=255-double(a);
+k=uint8(k);
+imshow(a);
+title('Original once Image')
+figure(2)
+imshow(k);
+title('Negative Of Original Image')
+```
+
+##->7. a.   Perform threshold operation<-
+
+```
+clc;
+close;
+a=imread((getIPCVpath() +"/images/"+'baboon.png'))
+a=rgb2gray(a);
+[ m n ] = size (a);
+for i =1 :m
+for j = 1 : n
+if(a(i,j)< 100)
+b(i,j)=0;
+else
+b(i,j)=255;
+end
+end end
+figure(1)
+imshow(a);
+title('Original Image');
+figure(2)
+imshow(b);
+title('Threshold Image');
+```
+
+##->7. b. perform gray level slicing without background<-
+
+```
+clc;
+x=imread(fullpath(getIPCVpath() +"/images/"+'baboon.png'));
+x=rgb2gray(x);
+y=double(x);
+[m,n] =size(y);
+L=max(max(x));
+a=round(L/2);
+b=L;
+for i = 1:m
+for j = 1:n
+if(y(i,j)>= a & y(i,j)<=b )
+z (i,j)=L;
+else
+z(i,j)=0;
+end
+end
+end
+z=uint8(z);
+for i = 1:m
+for j = 1:n
+if(y(i,j)>= a & y(i,j)<=b )
+w (i,j)=L;
+else
+w(i,j)=y(i,j);
+end
+end
+end
+z=uint8(z);
+w=uint8(w);
+figure(1)
+imshow(x);
+title('Original Image')
+figure(2)
+imshow(z);
+title(' Gray level scaling without preserving background')
+figure(3)
+imshow(w);
+title(' Gray level scaling with preserving background')
+```
+
+##->8. a.   Differentiation of Gaussian function<-
+
+```
+clc;
+close;
+sigma=input('Enter the value of sigma:');
+i=-10:.1:10;j=-10:.1:10;
+r=sqrt(i.*i+j.*j);
+y=(1/(sigma^2))*(((r.*r)/sigma^2)-1).*exp(-r.*r/2*sigma^2);
+plot(i, y);
+legend(sprintf('The value of sigma is %g',sigma));
+xtitle(' Differentiation of gaussian function ');
+```
+######(for output enter value 5)
+
+##->8. b.   Shape Of DOG Filter<-
+
+```
+clc;
+close;
+sigma1 =input(' Enter the value of sigma1 : ')
+sigma2 =input(' Enter the value of sigma2 : ')
+i= -10:.1:10;
+j= -10:.1:10;
+r=sqrt(i.*i+j.*j);
+y1 = (1/( sigma1 ^2))*(((r.*r)/sigma1 ^2) -1).*exp(-r.*r/2* sigma1 ^2);
+y2 = (1/( sigma2 ^2))*(((r.*r)/sigma2 ^2) -1).*exp(-r.*r/2* sigma2 ^2);
+y = y1 -y2;
+plot(i,y)
+xtitle(' Shape of DOG Filter ')
+```
+######(for output enter value 2&3 respectively)
+
+##->9. a.   Image Dilation<-
+
+```
+S=imread(fullpath(getIPCVpath() +"/images/"+'morpex.png'))
+figure(0);
+imshow(S);
+se = imcreatese('ellipse',9,9);
+c= imdilate(S,se);
+figure(1);
+imshow(c);
+```
+
+##->9. b.   Image Erosion<-
+
+```
+S=imread(fullpath(getIPCVpath() +"/images/"+'morpex.png'))
+figure(0);
+imshow(S);
+se= imcreatese('rect',3,3);
+b = imerode(S,se);
+figure(1);
+imshow(b);
+```
+
+##->9. c.   Image Opening<-
+
+```
+S=imread(fullpath(getIPCVpath() +"/images/"+'morpex.png'))
+figure(0);
+imshow(S);
+se = imcreatese('ellipse',9,9);
+S2 = imopen(S,se);
+figure(1);
+imshow(S2);
+```
+
+##->9. d.   Image Closing<-
+
+```
+S=imread(fullpath(getIPCVpath() +"/images/"+'morpex.png'))
+figure(0);
+imshow(S);
+se= imcreatese('ellipse',11,11);
+S3 = imclose(S,se);
+figure(2);
+imshow(S3);
+```
+
+##->10. a.  Histogram of Gray Scale Image<-
+
+```
+a=imread(fullpath(getIPCVpath() +"/images/"+'Lena_dark.png'));
+a=double(a);
+big=max(max(a));
+[row col] = size(a);
+c=row*col;
+h=zeros(1,300);
+z=zeros(1,300);
+for n= 1:1:row
+for m= 1:1:col
+if a (n,m)==0 then
+a(n,m)=1;
+end
+end
+end
+for n=1:1:row
+for m=1:1:col
+t=a(n,m);
+h(t)=h(t)+1;
+end end
+figure(1);
+imshow(uint8(a));
+figure(2);
+bar(h);
+```
+
+##->10. b.  Histogram of Color Image<-
+
+```
+a=imread(fullpath(getIPCVpath() +"/images/"+'baboon.png'));
+a=double(a);
+big=max(max(a));
+[row col] = size(a);
+c=row*col;
+h=zeros(1,300);
+z=zeros(1,300);
+for n= 1:1:row
+for m= 1:1:col
+if a (n,m)==0 then
+a(n,m)=1;
+end
+end
+end
+for n=1:1:row
+for m=1:1:col
+t=a(n,m);
+h(t)=h(t)+1;
+end end
+figure(1);
+imshow(uint8(a));
+figure(2);
+bar(h);
+```
+
+##->10.c     Histogram Equalization with imhistequal function<-
+
+```
+S=imread(fullpath(getIPCVpath() +"/images/"+'Lena_dark.png'));
+J = imhistequal(S);
+figure(1);
+imshow(S);
+figure(2);
+imshow(J);
+```
+
+##->10.d  Histogram Equalization Without Inbuilt Function<-
+
+```
+a=imread('tire.tif'); //read image
+figure(0);
+imshow(a); // display image
+histogram =histc(a);
+plot(histogram);
+a=double(a); //converts inttype integers or booleans into decimal encoding 
+ 
+big=max(max(a)); // maximum
+[r c] = size(a); //matrix size
+tot = r*c  //multiply rows and columns
+h=zeros(1,256); //store histogram values
+z=zeros(1,256);
+for i=1:1:r
+for j=1:1:c
+if a(i,j)==0
+a(i,j)=1;
+end
+end
+end
+for i=1:1:r
+for j=1:1:c
+t=a(i,j);
+h(t)=h(t)+1;
+end
+end
+pdf=h/tot; //probability distribution function
+cdf(1)=pdf(1); //cumulative distribution function i.e.,running sum 
+ 
+for i=2:1:big
+ 
+cdf(i)=pdf(i)+cdf(i-1);
+end
+new=round(cdf*big); //rounds the elements of x to the nearest integers.
+new=new+1;
+for i=1:1:r
+for j=1:1:c
+temp=a(i,j);
+b(i,j)=new(temp);
+t=b(i,j);
+z(t)=z(t)+1;
+end end
+subplot(2,1,2);
+plot(z);
+figure(1);
+imshow(b);
+```
+
+##->10.e. Read an RGB image and Extract the three color components red green blue<-
+
+```
+clc;
+close;
+RGB=imread((getIPCVpath() +"/images/"+'baboon.png'));
+R=RGB;
+G=RGB;
+B=RGB;
+R(:,:,2)=0;
+R(:,:,3)=0;
+G(:,:,1)=0;
+G(:,:,3)=0;
+B(:,:,1)=0;
+B(:,:,2)=0;
+figure(1)
+imshow(RGB);
+title('Original Image')
+figure(2)
+imshow(R);
+figure(3)
+imshow(G);
+figure(4)
+imshow(B);
+```
+
+##->10. f  Read a Color image and separate the color image into red green and blue planes<-
+
+```
+clc;
+close;
+RGB=imread((getIPCVpath() +"/images/"+'baboon.png'));
+a1=RGB;
+b1=RGB;
+c1=RGB;
+a1(:,:,1)=0;
+b1(:,:,2)=0;
+c1(:,:,3)=0;
+figure(1)
+imshow(RGB);
+figure(2)
+imshow(a1);
+figure(3)
+imshow(b1);
+figure(4)
+imshow(c1);
+```
